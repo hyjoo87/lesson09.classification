@@ -57,7 +57,7 @@ with col4:
                              title="뇌졸중 여부별 평균 혈당 비교", labels={"stroke_label": "뇌졸중 여부", "avg_glucose_level": "평균 혈당"})
     st.plotly_chart(fig_box_glucose, use_container_width=True)
 
-# 두 그룹의 평균값 표 (가장 안전한 문법으로 전면 수정)
+# 두 그룹의 평균값 표 (안전한 문법 적용)
 st.markdown("##### 📌 두 그룹의 평균값 비교 표")
 mean_table = df.groupby('stroke')[['age', 'avg_glucose_level']].mean(numeric_only=True).reset_index()
 mean_table['stroke'] = mean_table['stroke'].map({0: '정상 (0)', 1: '뇌졸중 (1)'})
@@ -111,8 +111,11 @@ st.dataframe(comparison_data, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 
-# 7. 흡연 상태 값마다 사람 수 세기 표
+# 7. 흡연 상태 값마다 사람 수 세기 표 (최신 판다스 호환 안전 문법 적용)
 st.subheader("5. 흡연 상태(Smoking Status)별 사람 수")
-smoking_counts = df['smoking_status'].value_counts().reset()
-smoking_counts.columns = ['흡연 상태 (smoking_status)', '사람 수']
+s_counts = df['smoking_status'].value_counts()
+smoking_counts = pd.DataFrame({
+    '흡연 상태 (smoking_status)': s_counts.index,
+    '사람 수': s_counts.values
+})
 st.dataframe(smoking_counts, use_container_width=True, hide_index=True)
