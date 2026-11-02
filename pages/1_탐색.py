@@ -57,9 +57,9 @@ with col4:
                              title="뇌졸중 여부별 평균 혈당 비교", labels={"stroke_label": "뇌졸중 여부", "avg_glucose_level": "평균 혈당"})
     st.plotly_chart(fig_box_glucose, use_container_width=True)
 
-# 두 그룹의 평균값 표 (안전한 문법으로 수정)
+# 두 그룹의 평균값 표 (가장 안전한 문법으로 전면 수정)
 st.markdown("##### 📌 두 그룹의 평균값 비교 표")
-mean_table = df[['stroke', 'age', 'avg_glucose_level']].groupby('stroke').mean().reset()
+mean_table = df.groupby('stroke')[['age', 'avg_glucose_level']].mean(numeric_only=True).reset_index()
 mean_table['stroke'] = mean_table['stroke'].map({0: '정상 (0)', 1: '뇌졸중 (1)'})
 mean_table.columns = ['뇌졸중 여부', '평균 나이', '평균 혈당']
 st.dataframe(mean_table, use_container_width=True, hide_index=True)
@@ -71,8 +71,8 @@ st.subheader("3. 고혈압 및 심장병에 따른 뇌졸중 비율")
 col5, col6 = st.columns(2)
 
 with col5:
-    # 고혈압 비율 계산 (안전한 문법으로 수정)
-    hypertension_df = df[['hypertension', 'stroke']].groupby('hypertension').mean().reset()
+    # 고혈압 비율 계산 (안전한 문법 적용)
+    hypertension_df = df.groupby('hypertension')['stroke'].mean(numeric_only=True).reset_index()
     hypertension_df['hypertension'] = hypertension_df['hypertension'].map({0: '고혈압 없음 (0)', 1: '고혈압 있음 (1)'})
     hypertension_df['stroke_rate'] = hypertension_df['stroke'] * 100
     
@@ -82,8 +82,8 @@ with col5:
     st.plotly_chart(fig_hyp, use_container_width=True)
 
 with col6:
-    # 심장병 비율 계산 (안전한 문법으로 수정)
-    heart_df = df[['heart_disease', 'stroke']].groupby('heart_disease').mean().reset()
+    # 심장병 비율 계산 (안전한 문법 적용)
+    heart_df = df.groupby('heart_disease')['stroke'].mean(numeric_only=True).reset_index()
     heart_df['heart_disease'] = heart_df['heart_disease'].map({0: '심장병 없음 (0)', 1: '심장병 있음 (1)'})
     heart_df['stroke_rate'] = heart_df['stroke'] * 100
     
