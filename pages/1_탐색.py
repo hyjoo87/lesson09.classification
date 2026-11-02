@@ -57,7 +57,7 @@ with col4:
                              title="뇌졸중 여부별 평균 혈당 비교", labels={"stroke_label": "뇌졸중 여부", "avg_glucose_level": "평균 혈당"})
     st.plotly_chart(fig_box_glucose, use_container_width=True)
 
-# 두 그룹의 평균값 표
+# 두 그룹의 평균값 표 (오류 수정: groupby 연산 후 컬럼 선택)
 st.markdown("##### 📌 두 그룹의 평균값 비교 표")
 mean_table = df.groupby('stroke')[['age', 'avg_glucose_level']].mean().reset()
 mean_table['stroke'] = mean_table['stroke'].map({0: '정상 (0)', 1: '뇌졸중 (1)'})
